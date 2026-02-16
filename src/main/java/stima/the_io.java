@@ -32,6 +32,4 @@ public class the_io {
         scr.close();
         return mat;
     }
-
-    
 }
