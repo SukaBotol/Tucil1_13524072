@@ -1,6 +1,5 @@
 package stima;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -122,7 +121,7 @@ public class matrix {
 
         //check if all colour field has a queen and only 1 queen
         for(int i=0;i<arr.size();i++){
-            if(set.contains(arr.get(i))){
+            if(set.contains(arr.get(i).character)){
                 return false;
             }
             else{
@@ -183,6 +182,7 @@ public class matrix {
         else{
             this.data[x][arr.get(i).c+1] = '#';
             arr.get(i).c +=1;
+            arr.get(i).character = original.data[x][arr.get(i).c];
         }
     }
 
@@ -199,11 +199,15 @@ public class matrix {
         return temp;
     }
 
-    public long bogo(ArrayList<cell> arr, boolean see_steps){
+    public long bogo(ArrayList<cell> arr, boolean see_steps, controller instance){
         int min=0,max = this.col-1;long x=1;
         matrix temp = new matrix(this.row, this.col);
         temp.copy(this);
         while(true){
+            if(instance.isStopped()){
+                System.out.println("Stopped!");
+                return x;
+            }
             for(int i=0;i<this.row;i++){
                 cell tempcell = temp.spawn_random(arr, max, min);
                 temp.data[tempcell.r][tempcell.c] = '#';
@@ -216,8 +220,16 @@ public class matrix {
                 break;
             }
             if(x%10000 == 0 && see_steps){
-                temp.print_matrix();
-                System.out.println("-------------");
+                // temp.print_matrix();
+                // System.out.println("-------------");
+                javafx.application.Platform.runLater(() -> {
+                    instance.print_queen(arr);
+                });
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             temp.copy(this);
             arr.clear();
@@ -225,7 +237,10 @@ public class matrix {
         }
         System.out.println(x + " configurations tested"); 
         System.out.println("Solution: ");
-        temp.print_matrix();
+        // temp.print_matrix();
+        javafx.application.Platform.runLater(() -> {
+            instance.print_queen(arr);
+        });
         return x;
     }
 
@@ -243,6 +258,10 @@ public class matrix {
         }
 
         while(!temp.queens_allright()){
+            if(instance.isStopped()){
+                System.out.println("Stopped!");
+                return x;
+            }
             if(temp.check(arr)){
                 solution_exists=true;
                 break;
@@ -257,7 +276,14 @@ public class matrix {
             if(x%1000 == 0 && see_steps){
                 // temp.print_matrix();
                 // System.out.println("-------------");
-                instance.print_queen(arr);
+                javafx.application.Platform.runLater(() -> {
+                    instance.print_queen(arr);
+                });
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -265,7 +291,9 @@ public class matrix {
         if(solution_exists){
             System.out.println("Solution: ");
             temp.print_matrix();
-            instance.print_queen(arr);
+            javafx.application.Platform.runLater(() -> {
+                instance.print_queen(arr);
+            });
         }
         else{
             System.out.println("No solution found!");
@@ -279,6 +307,10 @@ public class matrix {
         matrix temp = new matrix(this.row, this.col);
         temp.copy(this);
         while(temp.full_of_queens()==0){
+            if(instance.isStopped()){
+                System.out.println("Stopped!");
+                return x;
+            }
             i=0;j=0;
             if(temp.data[i][j]!='#'){
                 cell tempcell = new cell(i,j,this.data[i][j]);
@@ -311,7 +343,14 @@ public class matrix {
             if(x%1000 ==0 && see_steps){
                 // temp.print_matrix();
                 // System.out.println("-------------");
-                instance.print_queen(arr);
+                javafx.application.Platform.runLater(() -> {
+                    instance.print_queen(arr);
+                });
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -319,7 +358,9 @@ public class matrix {
         if(solution_exists){
             System.out.println("Solution: ");
             temp.print_matrix();
-            instance.print_queen(arr);
+            javafx.application.Platform.runLater(() -> {
+                instance.print_queen(arr);
+            });
         }
         else{
             System.out.println("No solution found!");

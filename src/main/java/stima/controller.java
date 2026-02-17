@@ -25,6 +25,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -100,6 +101,15 @@ public class controller implements Initializable{
     }
 
     public void boarding(ActionEvent e){
+        if(solveThread != null && solveThread.isAlive()){
+            stopFlag = true;
+            try {
+                solveThread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        stopFlag = false;
         current = the_io.parse_from_string(inputText.getText());
         gridpane.getChildren().clear();
         gridpane.getRowConstraints().clear();
@@ -114,7 +124,7 @@ public class controller implements Initializable{
         }
         for(int i=0;i<current.row;i++){
             for(int j=0;j<current.col;j++){
-                Pane cell = new Pane();
+                StackPane cell = new StackPane();
                 String currentColor = colors[Character.getNumericValue(current.data[i][j])-10];
                 cell.setBackground(new Background(new BackgroundFill(Color.web(currentColor),CornerRadii.EMPTY,Insets.EMPTY)));
                 cell.setStyle("-fx-border-width:1; -fx-border-color:#000000;");
@@ -124,37 +134,76 @@ public class controller implements Initializable{
     }
 
     ArrayList<cell> seen = new ArrayList<cell>();
+    private boolean stopFlag = false;
+    private Thread solveThread = null;
 
     public void solve(ActionEvent e){
-        
+        if(solveThread != null && solveThread.isAlive()){
+            stopFlag = true;
+            try {
+                solveThread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        stopFlag = false;
+        seen.clear();
+        current.print_matrix();
         String selectedMethod = selectMethod.getValue();
-        long start = System.currentTimeMillis();
-        current.clock_like(seen, showIteration.isSelected(), this);
-        long end = System.currentTimeMillis();
-        System.out.println("time taken: " +(end-start) + "ms");
-        // if(selectedMethod == "bit-like iteration"){
+        
+        if(selectedMethod == "bit-like iteration"){
+            solveThread = new Thread(()->{
+                long start = System.currentTimeMillis();
+                long x = current.bit_iteration(seen, showIteration.isSelected(), this);
+                long end = System.currentTimeMillis();
+                javafx.application.Platform.runLater(()->{
+                    timeTaken.setText("time taken: " +(end-start) + "ms");
+                    iterationCount.setText("cofigurations tested: "+String.valueOf(x));
+                });
+                System.out.println("time taken: " +(end-start) + "ms");
+            });
+            solveThread.start();
+        }
+        else if(selectedMethod == "clock-like iteration"){
+            solveThread = new Thread(()->{
+                long start = System.currentTimeMillis();
+                long x = current.clock_like(seen, showIteration.isSelected(), this);
+                long end = System.currentTimeMillis();
+                javafx.application.Platform.runLater(()->{
+                    timeTaken.setText("time taken: " +(end-start) + "ms");
+                    iterationCount.setText("cofigurations tested: "+String.valueOf(x));
+                });
+                System.out.println("time taken: " +(end-start) + "ms");
+            });
+            solveThread.start();
             
-        // }
-        // else if(selectedMethod == "bit-like iteration"){
+        }
+        else if(selectedMethod == "Let It Ride!! (not brute-force)"){
+            solveThread = new Thread(()->{
+                long start = System.currentTimeMillis();
+                long x = current.bogo(seen, showIteration.isSelected(), this);
+                long end = System.currentTimeMillis();
+                javafx.application.Platform.runLater(()->{
+                    timeTaken.setText("time taken: " +(end-start) + "ms");
+                    iterationCount.setText("cofigurations tested: "+String.valueOf(x));
+                });
+                System.out.println("time taken: " +(end-start) + "ms");
+            });
+            solveThread.start();
+        }
+        else{
 
-        // }
-        // else if(selectedMethod == "bit-like iteration"){
-            
-        // }
-        // else{
-
-        // }
+        }
     }
 
     public void print_queen(ArrayList<cell> arr){
         clear_queens();
         for(int i=0;i<arr.size();i++){
-            Pane cell = (Pane) gridpane.getChildren().get(arr.get(i).r * current.col + arr.get(i).c);
+            StackPane cell = (StackPane) gridpane.getChildren().get(arr.get(i).r * current.col + arr.get(i).c);
             ImageView imageview = new ImageView(new Image("/queen.png"));
-            imageview.fitWidthProperty().bind(cell.widthProperty().multiply(0.8));
-            imageview.fitHeightProperty().bind(cell.heightProperty().multiply(0.8));
+            imageview.fitWidthProperty().bind(cell.widthProperty().multiply(0.5));
+            imageview.fitHeightProperty().bind(cell.heightProperty().multiply(0.5));
             imageview.setPreserveRatio(true);
-            cell.setStyle("-fx-alignment: center;");
             cell.getChildren().add(imageview);
         }
     }
@@ -162,9 +211,13 @@ public class controller implements Initializable{
     public void clear_queens(){
         for(int i=0;i<current.row;i++){
             for(int j=0;j<current.col;j++){
-                Pane cell = (Pane) gridpane.getChildren().get(i * current.col + j);
+                StackPane cell = (StackPane) gridpane.getChildren().get(i * current.col + j);
                 cell.getChildren().clear();
             }
         }
+    }
+
+    public boolean isStopped(){
+        return stopFlag;
     }
 }
