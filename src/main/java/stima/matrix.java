@@ -199,8 +199,8 @@ public class matrix {
         return temp;
     }
 
-    public void bogo(ArrayList<cell> arr){
-        int min=0,max = this.col-1, x=1;;
+    public long bogo(ArrayList<cell> arr, boolean see_steps){
+        int min=0,max = this.col-1;long x=1;
         matrix temp = new matrix(this.row, this.col);
         temp.copy(this);
         while(true){
@@ -215,21 +215,22 @@ public class matrix {
             if(temp.check(arr)){
                 break;
             }
-            // if(x%10000 ==0){
-            //     temp.print_matrix();
-            //     System.out.println("-------------");
-            // }
+            if(x%10000 == 0 && see_steps){
+                temp.print_matrix();
+                System.out.println("-------------");
+            }
             temp.copy(this);
             arr.clear();
 
         }
-        System.out.println(x + " configurations tested");    
+        System.out.println(x + " configurations tested"); 
         System.out.println("Solution: ");
         temp.print_matrix();
+        return x;
     }
 
-    public void clock_like(ArrayList<cell> arr){
-        int i=0,j=0,x=1;
+    public long clock_like(ArrayList<cell> arr, boolean see_steps, controller instance){
+        long x=1;
         boolean solution_exists=false;
         matrix temp = new matrix(this.row, this.col);
         temp.copy(this);
@@ -253,25 +254,27 @@ public class matrix {
             // temp.print_matrix();
             // System.out.println("---------------");
             x++;
-            // System.out.println("-------------");
-            // if(x%1000 ==0){
-            //     temp.print_matrix();
-            //     System.out.println("-------------");
-            // }
+            if(x%1000 == 0 && see_steps){
+                // temp.print_matrix();
+                // System.out.println("-------------");
+                instance.print_queen(arr);
+            }
         }
 
         System.out.println(x + " configurations tested");
         if(solution_exists){
             System.out.println("Solution: ");
             temp.print_matrix();
+            instance.print_queen(arr);
         }
         else{
             System.out.println("No solution found!");
         }
+        return x;
     }
 
-    public void bit_iteration(ArrayList<cell> arr){
-        int i,j,x=1;
+    public long bit_iteration(ArrayList<cell> arr, boolean see_steps, controller instance){
+        int i,j; long x=1;
         boolean solution_exists=false;
         matrix temp = new matrix(this.row, this.col);
         temp.copy(this);
@@ -305,19 +308,23 @@ public class matrix {
                 solution_exists=true;
                 break;
             }
-            if(x%10000000 ==0){
-                temp.print_matrix();
-                System.out.println("-------------");
+            if(x%1000 ==0 && see_steps){
+                // temp.print_matrix();
+                // System.out.println("-------------");
+                instance.print_queen(arr);
             }
+
         }
         System.out.println(x + " configurations tested");
         if(solution_exists){
             System.out.println("Solution: ");
             temp.print_matrix();
+            instance.print_queen(arr);
         }
         else{
             System.out.println("No solution found!");
         }
+        return x;
     }
 
     

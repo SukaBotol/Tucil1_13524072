@@ -32,4 +32,37 @@ public class the_io {
         scr.close();
         return mat;
     }
+
+    public static matrix parse_from_string(String input){
+        int col=0, row=0;
+        if (input.length()==0){
+            throw new IllegalArgumentException("There is no Input");
+        }
+        String rows[] = input.split("\\n");
+        col = rows[0].length();
+        row = rows.length;
+        for(int i=1;i<rows.length;i++){
+            if(rows[i].length()!=col){
+                throw new IllegalArgumentException("matrix size not NxN");
+            }
+        }
+        if(col!=row){
+            throw new IllegalArgumentException("matrix size not NxN");
+        }
+
+        matrix temp = new matrix(row, col);
+
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                temp.data[i][j]=rows[i].charAt(j);
+            }
+        }
+        
+        temp.find_uniques();
+        if(temp.unique.size()!=row){
+            throw new IllegalArgumentException("region count != N");
+        }
+
+        return temp;
+    }
 }
