@@ -14,7 +14,7 @@ public class App{
         System.out.println();
         // System.out.println(mat.unique);
         long start = System.currentTimeMillis();
-        mat.test(seen);
+        mat.bogo(seen);
         long end = System.currentTimeMillis();
         System.out.println("time taken: " +(end-start) + "ms");
     }

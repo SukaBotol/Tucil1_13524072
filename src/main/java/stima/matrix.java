@@ -186,7 +186,49 @@ public class matrix {
         }
     }
 
-    public void test(ArrayList<cell> arr){
+    public cell spawn_random(ArrayList<cell> arr, int max, int min){
+        int randrow = (int)((Math.random() * (max-min+1)) +min);
+        int randcol = (int)((Math.random() * (max-min+1)) +min);
+        cell temp = new cell(randrow,randcol, this.data[randrow][randcol]);
+
+        for(int i=0;i<arr.size();i++){
+            if(arr.get(i).r == temp.r && arr.get(i).c== temp.c){
+                return this.spawn_random(arr, max, min);
+            }
+        }
+        return temp;
+    }
+
+    public void bogo(ArrayList<cell> arr){
+        int min=0,max = this.col-1, x=1;;
+        matrix temp = new matrix(this.row, this.col);
+        temp.copy(this);
+        while(true){
+            for(int i=0;i<this.row;i++){
+                cell tempcell = temp.spawn_random(arr, max, min);
+                temp.data[tempcell.r][tempcell.c] = '#';
+                arr.add(tempcell);
+            }
+            x++;
+            // temp.print_matrix();
+            // System.out.println("-------------");
+            if(temp.check(arr)){
+                break;
+            }
+            // if(x%10000 ==0){
+            //     temp.print_matrix();
+            //     System.out.println("-------------");
+            // }
+            temp.copy(this);
+            arr.clear();
+
+        }
+        System.out.println(x + " configurations tested");    
+        System.out.println("Solution: ");
+        temp.print_matrix();
+    }
+
+    public void clock_like(ArrayList<cell> arr){
         int i=0,j=0,x=1;
         boolean solution_exists=false;
         matrix temp = new matrix(this.row, this.col);
@@ -212,10 +254,10 @@ public class matrix {
             // System.out.println("---------------");
             x++;
             // System.out.println("-------------");
-            if(x%1000 ==0){
-                temp.print_matrix();
-                System.out.println("-------------");
-            }
+            // if(x%1000 ==0){
+            //     temp.print_matrix();
+            //     System.out.println("-------------");
+            // }
         }
 
         System.out.println(x + " configurations tested");
