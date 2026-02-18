@@ -1,23 +1,31 @@
 package stima;
 
-import java.util.ArrayList;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class App{
-    public static void main(String[] args) throws Exception{
-        matrix mat= the_io.read_file("test/test.txt");
-        ArrayList<cell> seen = new ArrayList<cell>();
-        mat.print_matrix();
-        mat.find_uniques();
-        // matrix test=new matrix(mat.row,mat.col);
-        // test.copy(mat);
-        // test.print_matrix();
-        System.out.println();
-        // System.out.println(mat.unique);
-        long start = System.currentTimeMillis();
-        mat.bogo(seen);
-        long end = System.currentTimeMillis();
-        System.out.println("time taken: " +(end-start) + "ms");
+public class App extends Application{
+    
+    @Override
+    public void start(Stage stage) throws Exception {
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
+            Scene scene = new Scene(root,Color.DIMGRAY);
+
+            stage.setTitle("queens game solver");
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }
-
+    public static void main(String[] args) throws Exception{
+        launch(args);
+    }
     
 }
