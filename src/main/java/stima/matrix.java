@@ -12,7 +12,7 @@ public class matrix {
 
     public matrix(int i, int j){
         if (i<=0 || j<=0){
-            throw new IllegalArgumentException("NIGGA!\n");
+            throw new IllegalArgumentException("invalid matrix!\n");
         }
         this.row=i;
         this.col=j;
@@ -21,7 +21,7 @@ public class matrix {
 
     public void find_uniques(){
         if (this.row<=0 || this.col<=0){
-            throw new IllegalArgumentException("Empty Matrix NIGGAAA!\n");
+            throw new IllegalArgumentException("Empty Matrix!\n");
         }
         ArrayList<Character> temp = new ArrayList<Character>();
         for(int i=0;i<this.row;i++){
@@ -214,14 +214,10 @@ public class matrix {
                 arr.add(tempcell);
             }
             x++;
-            // temp.print_matrix();
-            // System.out.println("-------------");
             if(temp.check(arr)){
                 break;
             }
             if(x%10000 == 0 && see_steps){
-                // temp.print_matrix();
-                // System.out.println("-------------");
                 javafx.application.Platform.runLater(() -> {
                     instance.print_queen(arr);
                 });
@@ -268,15 +264,8 @@ public class matrix {
                 break;
             }
             temp.move(0, this, arr);
-            
-            // System.out.println(x);
-            // System.out.println(arr);
-            // temp.print_matrix();
-            // System.out.println("---------------");
             x++;
             if(x%1000 == 0 && see_steps){
-                // temp.print_matrix();
-                // System.out.println("-------------");
                 javafx.application.Platform.runLater(() -> {
                     instance.print_queen(arr);
                 });
@@ -333,18 +322,12 @@ public class matrix {
                 arr.add(tempcell);
                 temp.data[i][j]='#';
             }
-            // System.out.println(x);
-            // temp.print_matrix();
-            // System.out.println(arr);
-            // System.out.println("-------------");
             x++;
             if(temp.check(arr)){
                 solution_exists=true;
                 break;
             }
             if(x%1000 ==0 && see_steps){
-                // temp.print_matrix();
-                // System.out.println("-------------");
                 javafx.application.Platform.runLater(() -> {
                     instance.print_queen(arr);
                 });

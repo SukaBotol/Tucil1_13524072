@@ -67,7 +67,7 @@ public class controller implements Initializable{
     public void initialize(URL arg0, ResourceBundle arg1){
         selectMethod.getItems().addAll(iteration_methods);
         inputText.clear();
-        filechooser.setInitialDirectory(new File("../Tucil1_13524072/test"));
+        filechooser.setInitialDirectory(new File("../Tucil1_13524072/data"));
         saveBtn.setDisable(true);
     }
 
@@ -244,6 +244,8 @@ public class controller implements Initializable{
                 }
                 stringgy.append("\n");
             }
+            stringgy.append("\n");stringgy.append(iterationCount.getText());
+            stringgy.append("\n");stringgy.append(timeTaken.getText());
             System.out.println(stringgy.toString());
             saveSystem(file, stringgy.toString());
         }
