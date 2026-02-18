@@ -2,6 +2,7 @@ package stima;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -77,7 +78,8 @@ public class controller implements Initializable{
     private Button solveBtn;
 
 
-    matrix current;
+    matrix current, tempres;
+
     String[] colors = {
         "#9214FA","#5482FB","#7C661E","#682DB1","#575757","#4E8259","#91FF4D","#F2E1A3","#E2E2E2","#6EBE58",
         "#AB4624","#CFA0FB","#DA00F6","#425B98","#EBAE30","#EBAE30","#98AC32","#D42731","#92FFD0","#7FD8FD",
@@ -138,6 +140,7 @@ public class controller implements Initializable{
     private Thread solveThread = null;
 
     public void solve(ActionEvent e){
+        saveBtn.setDisable(false);
         if(solveThread != null && solveThread.isAlive()){
             stopFlag = true;
             try {
@@ -194,6 +197,7 @@ public class controller implements Initializable{
         else{
 
         }
+        saveBtn.setDisable(false);
     }
 
     public void print_queen(ArrayList<cell> arr){
@@ -219,5 +223,46 @@ public class controller implements Initializable{
 
     public boolean isStopped(){
         return stopFlag;
+    }
+
+    public void set_temp_res(matrix source){
+        tempres = new matrix(source.row, source.col);
+        tempres.copy(source);
+    }
+
+    @FXML
+    void save(ActionEvent event){
+        filechooser.setTitle("Save to .txt file");
+        filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files", "*.txt"));
+        File file = filechooser.showSaveDialog(new Stage());
+        filechooser.setTitle("Save to .txt file");
+        if(file != null){
+            StringBuilder stringgy = new StringBuilder();
+            for(int i=0;i<current.row;i++){
+                for(int j=0;j<current.col;j++){
+                    stringgy.append(tempres.data[i][j]);
+                }
+                stringgy.append("\n");
+            }
+            System.out.println(stringgy.toString());
+            saveSystem(file, stringgy.toString());
+        }
+    }
+
+    public void saveSystem(File file, String content){
+        try {
+            if(content.equals(null)){
+                throw new IllegalArgumentException("There's nothing in the result Area");
+            }
+            else {
+                PrintWriter writer = new PrintWriter(file);
+                writer.write(content);
+                writer.close();
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
     }
 }

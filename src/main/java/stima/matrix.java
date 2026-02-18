@@ -241,6 +241,7 @@ public class matrix {
         javafx.application.Platform.runLater(() -> {
             instance.print_queen(arr);
         });
+        instance.set_temp_res(temp);
         return x;
     }
 
@@ -294,6 +295,7 @@ public class matrix {
             javafx.application.Platform.runLater(() -> {
                 instance.print_queen(arr);
             });
+            instance.set_temp_res(temp);
         }
         else{
             System.out.println("No solution found!");
@@ -361,6 +363,7 @@ public class matrix {
             javafx.application.Platform.runLater(() -> {
                 instance.print_queen(arr);
             });
+            instance.set_temp_res(temp);
         }
         else{
             System.out.println("No solution found!");

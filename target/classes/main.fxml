@@ -45,7 +45,7 @@
                   </GridPane>
                   <Label fx:id="timeTaken" layoutX="14.0" layoutY="508.0" prefHeight="17.0" />
                   <Label fx:id="iterationCount" layoutX="194.0" layoutY="508.0" prefHeight="17.0" />
-                  <Button fx:id="saveBtn" layoutX="407.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Save to .txt" />
+                  <Button fx:id="saveBtn" layoutX="407.0" layoutY="504.0" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="117.0" text="Save to .txt" />
                </children>
             </Pane>
          </children>
